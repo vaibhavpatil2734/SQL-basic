@@ -14,6 +14,14 @@ CREATE TABLE employees (
     department VARCHAR(50)
 );
 
+--1.3 Composite primary key
+CREATE TABLE student_course_enrollment (
+    student_id INT,
+    course_id INT,
+    enrollment_date DATE,
+    PRIMARY KEY (student_id, course_id)
+);
+
 -- 2. Foreign Key
 
 CREATE TABLE student_marks (
@@ -181,3 +189,64 @@ DELETE FROM stuz
 WHERE roll IN (SELECT roll
                FROM student_marks
                WHERE marks = 90);
+
+
+
+-- -- Table 1: stu (students)
+-- CREATE TABLE stu (
+--     id INT PRIMARY KEY, -- Unique identifier for each student
+--     name VARCHAR(50) NOT NULL, -- Name of the student
+--     class VARCHAR(10) NOT NULL -- Class of the student
+-- );
+
+-- -- Insert sample data into stu table
+-- INSERT INTO stu (id, name, class) VALUES
+-- (1, 'Alice', '10A'),
+-- (2, 'Bob', '10B'),
+-- (3, 'Charlie', '10A'),
+-- (4, 'Diana', '10C'),
+-- (5, 'Eve', '10D'); -- Added entry for student_id 5 to resolve foreign key constraint
+
+-- -- Table 2: res (results)
+-- CREATE TABLE res (
+--     stu_id INT, -- Identifier for the student (foreign key to stu table)
+--     subject VARCHAR(50) NOT NULL, -- Subject name
+--     marks INT CHECK (marks BETWEEN 0 AND 100), -- Marks obtained, should be between 0 and 100
+--     FOREIGN KEY (stu_id) REFERENCES stu(id) -- Foreign key constraint
+-- );
+
+-- -- Insert sample data into res table
+-- INSERT INTO res (stu_id, subject, marks) VALUES
+-- (1, 'Math', 85),
+-- (2, 'Science', 90),
+-- (3, 'Math', 78),
+-- (5, 'History', 88); -- This entry now works because student_id 5 exists in the stu table
+
+
+--Set Operations with These Tables
+--UNION
+--Combines rows from both tables, removing duplicates.
+SELECT id FROM stu
+UNION
+SELECT stu_id FROM res;
+
+
+--UNION ALL
+--Combines rows from both tables, including duplicates.
+SELECT id FROM stu
+UNION ALL
+SELECT stu_id FROM res;
+
+
+--INTERSECT
+--Returns common rows from both tables.
+SELECT id FROM stu
+INTERSECT
+SELECT stu_id FROM res;
+
+
+--MINUS (or EXCEPT)
+--Returns rows from stu that are not in res.
+SELECT id FROM stu
+EXCEPT
+SELECT stu_id FROM res;
