@@ -250,3 +250,61 @@ SELECT stu_id FROM res;
 SELECT id FROM stu
 EXCEPT
 SELECT stu_id FROM res;
+
+
+
+-- Creating sample tables for demonstration
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    department_id INT
+);
+
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(50)
+);
+
+-- Inserting sample data into employees table
+INSERT INTO employees (emp_id, name, department_id) VALUES
+(1, 'Alice', 101),
+(2, 'Bob', 102),
+(3, 'Charlie', 103),
+(4, 'David', NULL);
+
+-- Inserting sample data into departments table
+INSERT INTO departments (department_id, department_name) VALUES
+(101, 'HR'),
+(102, 'Finance'),
+(104, 'IT');
+
+-- 1. INNER JOIN: Returns only matching rows from both tables
+SELECT employees.name, employees.department_id, departments.department_name
+FROM employees
+INNER JOIN departments ON employees.department_id = departments.department_id;
+
+-- 2. LEFT JOIN: Returns all rows from the left table, and matching rows from the right table (NULL if no match)
+SELECT employees.name, employees.department_id, departments.department_name
+FROM employees
+LEFT JOIN departments ON employees.department_id = departments.department_id;
+
+-- 3. RIGHT JOIN: Returns all rows from the right table, and matching rows from the left table (NULL if no match)
+SELECT employees.name, employees.department_id, departments.department_name
+FROM employees
+RIGHT JOIN departments ON employees.department_id = departments.department_id;
+
+-- 4. FULL OUTER JOIN: Returns all rows when there is a match in either table
+-- Note: Some databases like MySQL don't support FULL OUTER JOIN directly
+SELECT employees.name, employees.department_id, departments.department_name
+FROM employees
+FULL OUTER JOIN departments ON employees.department_id = departments.department_id;
+
+-- 5. CROSS JOIN: Returns Cartesian product (each row of the first table joins with all rows of the second table)
+SELECT employees.name, departments.department_name
+FROM employees
+CROSS JOIN departments;
+
+-- 6. SELF JOIN: Joins a table with itself
+SELECT A.name AS Employee1, B.name AS Employee2, A.department_id
+FROM employees A
+INNER JOIN employees B ON A.department_id = B.department_id AND A.emp_id <> B.emp_id;
