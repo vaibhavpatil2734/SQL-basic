@@ -308,3 +308,45 @@ CROSS JOIN departments;
 SELECT A.name AS Employee1, B.name AS Employee2, A.department_id
 FROM employees A
 INNER JOIN employees B ON A.department_id = B.department_id AND A.emp_id <> B.emp_id;
+
+
+import sqlite3
+
+# Connect to SQLite database (or create it if it doesn't exist)
+conn = sqlite3.connect("sample.db")
+cursor = conn.cursor()
+
+# Create a table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    age INTEGER
+);
+""")
+
+# Insert data into the table
+cursor.executemany("""
+INSERT INTO users (name, age) VALUES (?, ?);
+""", [
+    ("Alice", 25),
+    ("Bob", 30),
+    ("Charlie", 22)
+])
+conn.commit()
+
+# Read data from the table
+cursor.execute("SELECT * FROM users;")
+users = cursor.fetchall()
+print("User Data:", users)
+
+# Update a record
+cursor.execute("UPDATE users SET age = 26 WHERE name = 'Alice';")
+conn.commit()
+
+# Delete a record
+cursor.execute("DELETE FROM users WHERE name = 'Charlie';")
+conn.commit()
+
+# Close the connection
+conn.close()
